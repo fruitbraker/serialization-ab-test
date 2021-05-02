@@ -32,7 +32,7 @@ fun randomInt(min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE): Int = random.
 
 fun randomListString(): List<String> {
     val list = mutableListOf<String>()
-    for (i in 1..randomInt(10, 1000)) {
+    for (i in 1..randomInt(0, 20)) {
         list.add(randomString())
     }
     return list
