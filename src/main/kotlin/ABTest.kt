@@ -9,8 +9,15 @@ fun main() {
     dataFile.forEachLine { line ->
         jackson.readValue(line, TestData::class.java)
     }
-    val endTimeJackson = System.currentTimeMillis()
-    val elapsedTimeJackson = endTimeJackson - startTimeJackson
+    val elapsedTimeJackson = System.currentTimeMillis() - startTimeJackson
+
+
+    val startTimeKotlinx = System.currentTimeMillis()
+    dataFile.forEachLine { line ->
+        Json.decodeFromString<TestData>(line)
+    }
+    val elapsedTimeKotlinx = System.currentTimeMillis() - startTimeKotlinx
 
     println("JacksonDeserializer took $elapsedTimeJackson ms")
+    println("Kotlinx.Deserializer took $elapsedTimeKotlinx ms")
 }

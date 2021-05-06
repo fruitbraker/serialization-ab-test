@@ -9,6 +9,9 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
 import kotlin.random.Random
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 val jackson: ObjectMapper = jacksonObjectMapper()
     .registerModule(Jdk8Module())
@@ -45,19 +48,36 @@ fun randomLong(min: Long = Long.MIN_VALUE, max: Long = Long.MAX_VALUE) = random.
 fun randomLocalDate(): LocalDate = LocalDate.now().plusDays(randomLong(0, 1000))
 
 fun main() {
-    for (i: Int in 1..10000) {
-        val testData = TestData(
+//    for (i: Int in 1..10000) {
+//        val testData = TestData(
+//            name = randomString(),
+//            date = randomLocalDate(),
+//            integer = randomInt(),
+//            double = randomDouble(),
+//            listString = randomListString(),
+//            listCustomData = CustomData(
+//                name = randomString(),
+//                integer = randomInt()
+//            )
+//        )
+//
+//        File("src/main/resources/testdata").appendText("${testData.toJson()}\n")
+//    }
+    val testData = TestData(
+        name = randomString(),
+        date = randomLocalDate(),
+        integer = randomInt(),
+        double = randomDouble(),
+        listString = randomListString(),
+        listCustomData = CustomData(
             name = randomString(),
-            date = randomLocalDate(),
-            integer = randomInt(),
-            double = randomDouble(),
-            listString = randomListString(),
-            listCustomData = CustomData(
-                name = randomString(),
-                integer = randomInt()
-            )
+            integer = randomInt()
         )
+    )
 
-        File("src/main/resources/testdata").appendText("${testData.toJson()}\n")
-    }
+    val jsonTestData = Json.encodeToString(testData)
+    println(jsonTestData)
+
+    val fromJsonTestData = Json.decodeFromString<TestData>(jsonTestData)
+    println(fromJsonTestData)
 }
