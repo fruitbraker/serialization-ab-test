@@ -8,7 +8,7 @@ JetBrains has also developed a [Serialization/Deserialization](https://github.co
 ## What are the differences?
 _WIP_
 The only immediate difference is that Kotlin.X requires additional configuration for serializing/deserializing non-primitive types,
-such as `LocalDate`. Jackson automatically does that for you. 
+such as `LocalDate`. Jackson automatically does that for you (at least for LocalDate) if you have the correct modules. 
 
 ## Environment
 
