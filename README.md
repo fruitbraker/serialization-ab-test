@@ -20,9 +20,18 @@ such as `LocalDate`. Jackson automatically does that for you.
 
 ## Results
 
+### Deserialization
 File | Jackson (ms) | KotlinX (ms)
 ----|---------------|-----------
 testdata|1774 ms|545 ms
+
+### Serialization
+
+Randomly generating 1000 test objects
+
+Jackson serialization took 751 ms
+
+Kotlin.X serialization took 101 ms
 
 ## Conclusion
 
