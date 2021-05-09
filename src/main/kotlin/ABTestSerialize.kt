@@ -1,14 +1,16 @@
+import java.text.DecimalFormat
+import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 fun main() {
-
-    var jacksonTotal = 0L
-    var kotlinxTotal = 0L
-
     var runResults = mutableListOf<Pair<Long, Long>>()
 
-    for (runs in 1..100) {
+    for (runs in 1..20) {
+        println("Test $runs")
+        var jacksonTotal = 0L
+        var kotlinxTotal = 0L
         val testDataList = mutableListOf<TestData>()
         for (i in 1..10000) {
             testDataList.add(
@@ -25,26 +27,19 @@ fun main() {
                 )
             )
         }
+        testDataList.forEach {
+            val jacksonTimeNano = measureNanoTime { it.toJson() }
+            val kotlinxTimeNano = measureNanoTime { Json.encodeToString(it) }
 
-        val startTimeJackson = System.currentTimeMillis()
-        testDataList.forEach { it.toJson() }
-        val elapsedTimeJackson = System.currentTimeMillis() - startTimeJackson
-
-        val startTimeKotlinx = System.currentTimeMillis()
-        testDataList.forEach { Json.encodeToString(it) }
-        val elapsedTimeKotlinx = System.currentTimeMillis() - startTimeKotlinx
-
-        jacksonTotal += elapsedTimeJackson
-        kotlinxTotal += elapsedTimeKotlinx
-
-        runResults.add(elapsedTimeJackson to elapsedTimeKotlinx)
+            jacksonTotal += jacksonTimeNano
+            kotlinxTotal += kotlinxTimeNano
+        }
+        runResults.add(jacksonTotal to kotlinxTotal)
     }
 
-    runResults.forEach {
-        println("| ${it.first} | ${it.second} ")
+    val df = DecimalFormat("#,###,###")
+    runResults.forEachIndexed { index, pair ->
+        println("${index+1} | ${df.format(pair.first)} | ${df.format(pair.second)} ")
     }
-
-    println("Jackson serialization took an average ${jacksonTotal/100} ms")
-    println("Kotlin.X serialization took average ${kotlinxTotal/100} ms")
 }
 
